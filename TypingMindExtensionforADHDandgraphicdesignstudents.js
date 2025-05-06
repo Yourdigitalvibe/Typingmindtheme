@@ -1,4 +1,1191 @@
-function toggleTaskCompletion(taskId) {
+<h4>Font Pairings</h4>
+          <div class="font-pairings">
+            <div class="font-pair">
+              <div style="font-family: 'Georgia', serif; font-size: 20px;">Georgia</div>
+              <div style="font-family: 'Verdana', sans-serif; font-size: 14px;">Verdana for body text</div>
+            </div>
+            <div class="font-pair">
+              <div style="font-family: 'Playfair Display', serif; font-size: 20px;">Playfair Display</div>
+              <div style="font-family: 'Source Sans Pro', sans-serif; font-size: 14px;">Source Sans Pro for body text</div>
+            </div>
+          </div>
+          
+          <div class="font-preview" contenteditable="true">
+            Type here to preview fonts...
+          </div>
+          
+          <div class="font-controls">
+            <select class="font-selector">
+              <option>OpenDyslexic</option>
+              <option>Arial</option>
+              <option>Georgia</option>
+              <option>Verdana</option>
+              <option>Times New Roman</option>
+              <option>Helvetica</option>
+            </select>
+            <input type="range" min="12" max="72" value="16" class="font-size-slider">
+            <span class="font-size-value">16px</span>
+          </div>
+        </div>
+        
+        <div id="inspiration-tab" class="tab-content">
+          <h4>Design Inspiration</h4>
+          <div class="inspiration-gallery">
+            <!-- Placeholder images for inspiration gallery -->
+            <div class="inspiration-item" style="background-color: #f5f5f5;"></div>
+            <div class="inspiration-item" style="background-color: #e0e0e0;"></div>
+            <div class="inspiration-item" style="background-color: #d5d5d5;"></div>
+            <div class="inspiration-item" style="background-color: #f0f0f0;"></div>
+            <div class="inspiration-item" style="background-color: #e5e5e5;"></div>
+            <div class="inspiration-item" style="background-color: #dadada;"></div>
+          </div>
+          
+          <button class="widget-button add-inspiration-btn" style="margin-top: 10px;">Add Inspiration</button>
+          
+          <h4 style="margin-top: 15px;">Design Resources</h4>
+          <div class="design-resources">
+            <a href="https://color.adobe.com" target="_blank" class="resource-link">Adobe Color</a>
+            <a href="https://fonts.google.com" target="_blank" class="resource-link">Google Fonts</a>
+            <a href="https://dribbble.com" target="_blank" class="resource-link">Dribbble</a>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    // Initialize design tools
+    initializeDesignTools(container);
+  }
+  
+  function renderClientWidget(container) {
+    container.innerHTML = `
+      <div class="client-header">
+        <h4>Clients & Projects</h4>
+        <button class="widget-button add-client-btn">Add Client</button>
+      </div>
+      
+      <div class="client-list"></div>
+      
+      <div class="client-info"></div>
+    `;
+    
+    // Initialize client manager
+    initializeClientManager(container);
+  }
+  
+  function renderTimelineWidget(container) {
+    container.innerHTML = `
+      <div class="timeline-header">
+        <h4>Upcoming Deadlines</h4>
+        <div>
+          <button class="widget-button prev-week-btn">◀</button>
+          <span class="timeline-date-range">This Week</span>
+          <button class="widget-button next-week-btn">▶</button>
+        </div>
+      </div>
+      
+      <div class="timeline-wrapper">
+        <div class="timeline-days"></div>
+        <div class="timeline-events"></div>
+      </div>
+      
+      <div class="timeline-legend" style="margin-top: 10px; font-size: 12px;">
+        <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
+          <div style="width: 10px; height: 10px; background-color: var(--accent-color); border-radius: 50%;"></div>
+          <span>Task Deadline</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+          <div style="width: 10px; height: 10px; background-color: var(--focus-color); border-radius: 50%;"></div>
+          <span>Project Milestone</span>
+        </div>
+      </div>
+    `;
+    
+    // Initialize timeline view
+    initializeTimeline(container);
+  }
+  
+  function renderMultiChatWidget(container) {
+    container.innerHTML = `
+      <div class="multi-chat-tabs"></div>
+      <div class="widget-buttons">
+        <button class="widget-button new-chat-btn">New Chat</button>
+        <button class="widget-button rename-chat-btn">Rename Current</button>
+        <button class="widget-button save-chats-btn">Save All Chats</button>
+      </div>
+    `;
+    
+    // Add event listeners
+    container.querySelector('.new-chat-btn').addEventListener('click', createNewChat);
+    container.querySelector('.rename-chat-btn').addEventListener('click', renameCurrentChat);
+    container.querySelector('.save-chats-btn').addEventListener('click', saveAllChats);
+    
+    // Render initial chat tabs
+    renderChatTabs();
+  }
+  
+  function renderProjectWidget(container) {
+    container.innerHTML = `
+      <div class="project-folders-header">
+        <div class="task-list-title">Project Folders</div>
+        <div class="task-list-actions">
+          <button class="widget-button add-project-btn">Add Project</button>
+        </div>
+      </div>
+      <div class="project-folders-list"></div>
+    `;
+    
+    // Add event listeners
+    container.querySelector('.add-project-btn').addEventListener('click', addNewProject);
+    
+    // Render initial projects
+    renderProjects();
+  }
+  
+  function renderPromptWidget(container) {
+    container.innerHTML = `
+      <div class="project-folders-header">
+        <div class="task-list-title">Prompt Templates</div>
+        <div class="task-list-actions">
+          <button class="widget-button add-prompt-btn">Add New</button>
+        </div>
+      </div>
+      <div class="prompt-templates-list"></div>
+    `;
+    
+    // Add event listeners
+    container.querySelector('.add-prompt-btn').addEventListener('click', addNewPromptTemplate);
+    
+    // Render initial prompts
+    renderPromptTemplates();
+  }
+  
+  function renderThemeWidget(container) {
+    container.innerHTML = `
+      <div style="margin-bottom: 15px;">
+        <div style="margin-bottom: 5px; font-weight: bold;">Color Theme</div>
+        <div class="theme-options">
+          <div class="theme-option ${state.theme === 'theme-teal' ? 'active' : ''}" data-theme="theme-teal" style="background: linear-gradient(135deg, #3a9ea5, #c5f0f5);"></div>
+          <div class="theme-option ${state.theme === 'theme-purple' ? 'active' : ''}" data-theme="theme-purple" style="background: linear-gradient(135deg, #9b5de5, #f3e7ff);"></div>
+          <div class="theme-option ${state.theme === 'theme-orange' ? 'active' : ''}" data-theme="theme-orange" style="background: linear-gradient(135deg, #f8961e, #fff1e0);"></div>
+          <div class="theme-option ${state.theme === 'theme-green' ? 'active' : ''}" data-theme="theme-green" style="background: linear-gradient(135deg, #06d6a0, #e0fff7);"></div>
+          <div class="theme-option ${state.theme === 'theme-pink' ? 'active' : ''}" data-theme="theme-pink" style="background: linear-gradient(135deg, #f15bb5, #ffe5f4);"></div>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+          <input type="checkbox" id="pattern-bg-toggle" ${state.patternBackground ? 'checked' : ''}>
+          Show Background Pattern
+        </label>
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <div style="margin-bottom: 5px; font-weight: bold;">Font Size</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <input type="range" min="0.8" max="1.2" step="0.05" value="1.0" id="font-scale-slider">
+          <span id="font-scale-value">100%</span>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <button class="widget-button toggle-focus-btn">
+          ${state.focusMode ? 'Disable' : 'Enable'} Focus Mode
+        </button>
+      </div>
+      
+      <div style="margin-top: 10px; font-size: 12px; color: #888;">
+        These settings help reduce visual fatigue and improve focus for ADHD/dyslexic users.
+      </div>
+    `;
+    
+    // Add event listeners
+    const themeOptions = container.querySelectorAll('.theme-option');
+    themeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const theme = option.dataset.theme;
+        changeTheme(theme);
+        
+        // Update active state
+        themeOptions.forEach(opt => opt.classList.remove('active'));
+        option.classList.add('active');
+      });
+    });
+    
+    const patternToggle = container.querySelector('#pattern-bg-toggle');
+    patternToggle.addEventListener('change', function() {
+      toggleBackgroundPattern(this.checked);
+    });
+    
+    const fontScaleSlider = container.querySelector('#font-scale-slider');
+    fontScaleSlider.addEventListener('input', function() {
+      const scale = parseFloat(this.value);
+      updateFontScale(scale);
+      container.querySelector('#font-scale-value').textContent = `${Math.round(scale * 100)}%`;
+    });
+    
+    container.querySelector('.toggle-focus-btn').addEventListener('click', toggleFocusMode);
+  }
+  
+  function renderIntegrationsWidget(container) {
+    container.innerHTML = `
+      <div style="margin-bottom: 15px;">
+        <div style="font-weight: bold; margin-bottom: 5px;">Google Drive Integration</div>
+        <button class="widget-button google-drive-auth-btn">
+          ${state.googleDriveEnabled ? 'Disconnect' : 'Connect'} Google Drive
+        </button>
+        ${state.googleDriveEnabled ? `
+          <div style="margin-top: 10px;">
+            <button class="widget-button save-to-drive-btn">Save Current Chat</button>
+            <button class="widget-button browse-drive-btn">Browse Files</button>
+          </div>
+        ` : ''}
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <div style="font-weight: bold; margin-bottom: 5px;">Notion Integration</div>
+        <button class="widget-button notion-auth-btn">
+          ${state.notionEnabled ? 'Disconnect' : 'Connect'} Notion
+        </button>
+        ${state.notionEnabled ? `
+          <div style="margin-top: 10px;">
+            <button class="widget-button save-to-notion-btn">Save to Notion</button>
+          </div>
+        ` : ''}
+      </div>
+      
+      <div style="margin-top: 10px; font-size: 12px; color: #888;">
+        Connect your accounts to sync conversations and tasks across platforms.
+      </div>
+    `;
+    
+    // Add event listeners
+    container.querySelector('.google-drive-auth-btn').addEventListener('click', toggleGoogleDriveAuth);
+    
+    if (state.googleDriveEnabled) {
+      container.querySelector('.save-to-drive-btn').addEventListener('click', saveCurrentChatToDrive);
+      container.querySelector('.browse-drive-btn').addEventListener('click', browseGoogleDrive);
+    }
+    
+    container.querySelector('.notion-auth-btn').addEventListener('click', toggleNotionAuth);
+    
+    if (state.notionEnabled) {
+      container.querySelector('.save-to-notion-btn').addEventListener('click', saveToNotion);
+    }
+  }
+  
+  // Initialize specialized widget functionalities
+  function initializeNotebook(container) {
+    // Populate notebook selector
+    const notebookSelector = container.querySelector('.notebook-selector');
+    notebookSelector.innerHTML = '';
+    
+    // Add existing notebooks
+    state.notebooks.forEach(notebook => {
+      const option = document.createElement('option');
+      option.value = notebook.id;
+      option.textContent = notebook.name;
+      notebookSelector.appendChild(option);
+    });
+    
+    // Add "New Notebook" option
+    const newOption = document.createElement('option');
+    newOption.value = 'new';
+    newOption.textContent = '+ New Notebook';
+    notebookSelector.appendChild(newOption);
+    
+    // Set the active notebook
+    notebookSelector.value = state.activeNotebook;
+    
+    // Load content
+    const activeNotebook = state.notebooks.find(n => n.id === state.activeNotebook);
+    if (activeNotebook) {
+      const editorContent = container.querySelector('.editor-content');
+      editorContent.innerHTML = activeNotebook.content;
+      
+      // Update last saved info
+      const lastSaved = new Date(activeNotebook.modified);
+      container.querySelector('.notebook-status').textContent = `Last saved: ${lastSaved.toLocaleString()}`;
+    }
+    
+    // Add event listeners
+    notebookSelector.addEventListener('change', function() {
+      if (this.value === 'new') {
+        // Create new notebook
+        const notebookName = prompt('Enter name for new notebook:');
+        if (notebookName && notebookName.trim()) {
+          createNewNotebook(notebookName.trim());
+          this.value = state.activeNotebook; // Set to newly created notebook
+        } else {
+          this.value = state.activeNotebook; // Revert to previous selection
+        }
+      } else {
+        // Check for unsaved changes
+        if (state.unsavedChanges) {
+          if (confirm('You have unsaved changes. Save before switching notebooks?')) {
+            saveCurrentNotebook();
+          }
+        }
+        
+        // Switch to selected notebook
+        state.activeNotebook = this.value;
+        loadNotebook(state.activeNotebook);
+      }
+    });
+    
+    // Editor content change
+    const editorContent = container.querySelector('.editor-content');
+    editorContent.addEventListener('input', function() {
+      state.unsavedChanges = true;
+      container.querySelector('.notebook-status').textContent = 'Unsaved changes';
+    });
+    
+    // Format buttons
+    const formatButtons = container.querySelectorAll('.editor-toolbar button');
+    formatButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const format = this.dataset.format;
+        formatText(format);
+      });
+    });
+    
+    // Export button
+    container.querySelector('.export-notes-btn').addEventListener('click', exportNotebook);
+    
+    // Save to Drive button
+    container.querySelector('.save-to-drive-btn').addEventListener('click', function() {
+      saveCurrentNotebook();
+      if (state.googleDriveEnabled) {
+        saveNotebookToDrive();
+      } else {
+        showNotification('Notebook saved locally. Connect Google Drive to sync.', 'info');
+      }
+    });
+  }
+  
+  function loadNotebook(notebookId) {
+    const notebook = state.notebooks.find(n => n.id === notebookId);
+    if (!notebook) return;
+    
+    const notebookWidget = document.getElementById('notebook-widget');
+    if (!notebookWidget) return;
+    
+    const editorContent = notebookWidget.querySelector('.editor-content');
+    editorContent.innerHTML = notebook.content;
+    
+    // Update last saved info
+    const lastSaved = new Date(notebook.modified);
+    notebookWidget.querySelector('.notebook-status').textContent = `Last saved: ${lastSaved.toLocaleString()}`;
+    
+    state.unsavedChanges = false;
+  }
+  
+  function createNewNotebook(name) {
+    const newNotebook = {
+      id: 'notebook_' + Date.now(),
+      name: name,
+      content: '<p>Start typing your notes here...</p>',
+      created: new Date().toISOString(),
+      modified: new Date().toISOString()
+    };
+    
+    state.notebooks.push(newNotebook);
+    state.activeNotebook = newNotebook.id;
+    saveNotebooks();
+    
+    // Reload notebook selector
+    const notebookWidget = document.getElementById('notebook-widget');
+    if (notebookWidget) {
+      initializeNotebook(notebookWidget.querySelector('.widget-body'));
+    }
+    
+    showNotification(`New notebook "${name}" created`, 'success');
+  }
+  
+  function saveCurrentNotebook() {
+    const notebook = state.notebooks.find(n => n.id === state.activeNotebook);
+    if (!notebook) return;
+    
+    const notebookWidget = document.getElementById('notebook-widget');
+    if (!notebookWidget) return;
+    
+    const editorContent = notebookWidget.querySelector('.editor-content');
+    notebook.content = editorContent.innerHTML;
+    notebook.modified = new Date().toISOString();
+    
+    saveNotebooks();
+    
+    // Update last saved info
+    const lastSaved = new Date(notebook.modified);
+    notebookWidget.querySelector('.notebook-status').textContent = `Last saved: ${lastSaved.toLocaleString()}`;
+    
+    state.unsavedChanges = false;
+    showNotification('Notebook saved', 'success');
+  }
+  
+  function formatText(format) {
+    if (!document.execCommand) {
+      showNotification('Text formatting not supported in your browser', 'error');
+      return;
+    }
+    
+    switch(format) {
+      case 'bold':
+        document.execCommand('bold', false, null);
+        break;
+      case 'italic':
+        document.execCommand('italic', false, null);
+        break;
+      case 'heading':
+        document.execCommand('formatBlock', false, '<h3>');
+        break;
+      case 'list':
+        document.execCommand('insertUnorderedList', false, null);
+        break;
+      case 'image':
+        const imageUrl = prompt('Enter image URL:');
+        if (imageUrl) {
+          document.execCommand('insertHTML', false, `<img src="${imageUrl}" style="max-width: 100%;">`);
+        }
+        break;
+      case 'color':
+        const color = prompt('Enter color (name or hex):');
+        if (color) {
+          document.execCommand('foreColor', false, color);
+        }
+        break;
+    }
+    
+    // Mark as unsaved
+    state.unsavedChanges = true;
+    const notebookWidget = document.getElementById('notebook-widget');
+    if (notebookWidget) {
+      notebookWidget.querySelector('.notebook-status').textContent = 'Unsaved changes';
+    }
+  }
+  
+  function exportNotebook() {
+    const notebook = state.notebooks.find(n => n.id === state.activeNotebook);
+    if (!notebook) return;
+    
+    // Save any unsaved changes
+    if (state.unsavedChanges) {
+      saveCurrentNotebook();
+    }
+    
+    // Offer export options
+    const exportFormat = prompt('Choose export format (pdf, html, markdown, text):', 'pdf');
+    if (!exportFormat) return;
+    
+    switch (exportFormat.toLowerCase()) {
+      case 'pdf':
+        showNotification('PDF export would be generated here', 'info');
+        break;
+      case 'html':
+        // Create a download link for HTML content
+        const htmlContent = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>${notebook.name}</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 20px; }
+              img { max-width: 100%; }
+            </style>
+          </head>
+          <body>
+            <h1>${notebook.name}</h1>
+            <div>${notebook.content}</div>
+          </body>
+          </html>
+        `;
+        
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${notebook.name.replace(/\s+/g, '_')}.html`;
+        a.click();
+        
+        URL.revokeObjectURL(url);
+        showNotification('HTML export created', 'success');
+        break;
+      case 'markdown':
+      case 'text':
+        showNotification(`${exportFormat.toUpperCase()} export would be generated here`, 'info');
+        break;
+      default:
+        showNotification('Unsupported export format', 'error');
+    }
+  }
+  
+  function saveNotebookToDrive() {
+    if (!state.googleDriveEnabled) {
+      showNotification('Google Drive not connected', 'error');
+      return;
+    }
+    
+    showNotification('Saving notebook to Google Drive...', 'info');
+    
+    // In a real implementation, this would use the Google Drive API
+    // For demo, we'll simulate the save operation
+    
+    setTimeout(() => {
+      showNotification('Notebook saved to Google Drive', 'success');
+    }, 1500);
+  }
+  
+  function populateModuleList(container) {
+    const moduleList = container.querySelector('.module-list');
+    if (!moduleList) return;
+    
+    moduleList.innerHTML = '';
+    
+    // Add all modules from documentation
+    widgets.forEach(widget => {
+      if (moduleDocs[widget.id]) {
+        const moduleItem = document.createElement('div');
+        moduleItem.className = 'module-item';
+        moduleItem.dataset.id = widget.id;
+        moduleItem.dataset.category = widget.category || 'misc';
+        
+        moduleItem.innerHTML = `
+          <div>${moduleDocs[widget.id].icon} ${moduleDocs[widget.id].title}</div>
+          <div style="font-size: 12px; color: #888;">${widget.category || 'misc'}</div>
+        `;
+        
+        moduleItem.addEventListener('click', () => {
+          showModuleDetails(widget.id, container);
+        });
+        
+        moduleList.appendChild(moduleItem);
+      }
+    });
+  }
+  
+  function showModuleDetails(moduleId, container) {
+    const moduleDetails = container.querySelector('.module-details');
+    if (!moduleDetails) return;
+    
+    const doc = moduleDocs[moduleId];
+    if (!doc) {
+      moduleDetails.innerHTML = '<div>No documentation available for this module</div>';
+      return;
+    }
+    
+    // Highlight the selected module in the list
+    const moduleItems = container.querySelectorAll('.module-item');
+    moduleItems.forEach(item => {
+      if (item.dataset.id === moduleId) {
+        item.style.backgroundColor = 'var(--teal-light)';
+      } else {
+        item.style.backgroundColor = '';
+      }
+    });
+    
+    // Show the documentation
+    moduleDetails.innerHTML = `
+      <h3>${doc.icon} ${doc.title}</h3>
+      <div style="margin: 10px 0;">
+        <span class="category-tag" style="background-color: var(--accent-color); color: white; padding: 2px 6px; border-radius: 10px; font-size: 12px;">${doc.category}</span>
+      </div>
+      <p>${doc.description}</p>
+      
+      <h4 style="margin-top: 15px;">Features</h4>
+      <ul style="padding-left: 20px;">
+        ${doc.features.map(feature => `<li>${feature}</li>`).join('')}
+      </ul>
+      
+      <h4 style="margin-top: 15px;">How to Use</h4>
+      <p>${doc.usage}</p>
+      
+      <h4 style="margin-top: 15px;">Tips</h4>
+      <ul style="padding-left: 20px;">
+        ${doc.tips.map(tip => `<li>${tip}</li>`).join('')}
+      </ul>
+      
+      <div style="margin-top: 15px;">
+        <button class="widget-button show-module-btn" data-id="${moduleId}">Open Widget</button>
+      </div>
+    `;
+    
+    // Add event listener for the show button
+    moduleDetails.querySelector('.show-module-btn').addEventListener('click', function() {
+      const widgetId = this.dataset.id;
+      const widget = document.getElementById(widgetId);
+      
+      if (widget) {
+        widget.style.display = 'flex';
+      } else {
+        // Create widget if it doesn't exist (lazy loading)
+        const widgetDef = widgets.find(w => w.id === widgetId);
+        if (widgetDef) {
+          const created = createWidget(widgetDef);
+          if (created.lazyLoaded) {
+            created.element.style.display = 'flex';
+          }
+        }
+      }
+    });
+  }
+  
+  function filterModules(searchText) {
+    const moduleList = document.querySelector('.module-list');
+    if (!moduleList) return;
+    
+    const moduleItems = moduleList.querySelectorAll('.module-item');
+    
+    if (!searchText) {
+      // Show all
+      moduleItems.forEach(item => {
+        item.style.display = '';
+      });
+      return;
+    }
+    
+    const lowerSearch = searchText.toLowerCase();
+    
+    moduleItems.forEach(item => {
+      const moduleId = item.dataset.id;
+      const doc = moduleDocs[moduleId];
+      
+      if (!doc) {
+        item.style.display = 'none';
+        return;
+      }
+      
+      const titleMatch = doc.title.toLowerCase().includes(lowerSearch);
+      const descMatch = doc.description.toLowerCase().includes(lowerSearch);
+      const categoryMatch = doc.category.toLowerCase().includes(lowerSearch);
+      
+      if (titleMatch || descMatch || categoryMatch) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+  
+  function filterModulesByCategory(category) {
+    const moduleList = document.querySelector('.module-list');
+    if (!moduleList) return;
+    
+    const moduleItems = moduleList.querySelectorAll('.module-item');
+    
+    if (category === 'all') {
+      // Show all
+      moduleItems.forEach(item => {
+        item.style.display = '';
+      });
+      return;
+    }
+    
+    moduleItems.forEach(item => {
+      if (item.dataset.category === category) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+  
+  function initializeDesignTools(container) {
+    // Set up tab switching
+    const tabButtons = container.querySelectorAll('.tab-btn');
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons and content
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        container.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        // Add active class to clicked button and corresponding content
+        this.classList.add('active');
+        const tabId = this.dataset.tab;
+        container.querySelector(`#${tabId}`).classList.add('active');
+      });
+    });
+    
+    // Populate saved color palettes
+    renderSavedPalettes(container);
+    
+    // Add event listeners
+    container.querySelector('.new-palette-btn').addEventListener('click', createNewPalette);
+    container.querySelector('.color-picker-btn').addEventListener('click', openColorPicker);
+    container.querySelector('.contrast-checker-btn').addEventListener('click', openContrastChecker);
+    container.querySelector('.add-inspiration-btn').addEventListener('click', addInspirationImage);
+    
+    // Set up font preview functionality
+    const fontSelector = container.querySelector('.font-selector');
+    const fontSizeSlider = container.querySelector('.font-size-slider');
+    const fontPreview = container.querySelector('.font-preview');
+    
+    if (fontSelector && fontSizeSlider && fontPreview) {
+      fontSelector.addEventListener('change', function() {
+        fontPreview.style.fontFamily = this.value;
+      });
+      
+      fontSizeSlider.addEventListener('input', function() {
+        const size = this.value;
+        fontPreview.style.fontSize = `${size}px`;
+        container.querySelector('.font-size-value').textContent = `${size}px`;
+      });
+    }
+  }
+  
+  function renderSavedPalettes(container) {
+    const palettesContainer = container.querySelector('.saved-palettes');
+    if (!palettesContainer) return;
+    
+    palettesContainer.innerHTML = '';
+    
+    state.colorPalettes.forEach(palette => {
+      const paletteElement = document.createElement('div');
+      paletteElement.className = 'color-palette';
+      paletteElement.dataset.id = palette.id;
+      
+      // Add color swatches
+      palette.colors.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch';
+        swatch.style.backgroundColor = color;
+        swatch.title = color;
+        paletteElement.appendChild(swatch);
+      });
+      
+      // Add palette name
+      const nameElement = document.createElement('div');
+      nameElement.style.fontSize = '12px';
+      nameElement.style.marginTop = '5px';
+      nameElement.textContent = palette.name;
+      paletteElement.appendChild(nameElement);
+      
+      palettesContainer.appendChild(paletteElement);
+    });
+  }
+  
+  function createNewPalette() {
+    // In a real implementation, this would open a color palette creator
+    // For demo, we'll create a simple palette with random colors
+    
+    const paletteName = prompt('Enter name for new color palette:');
+    if (!paletteName || !paletteName.trim()) return;
+    
+    // Generate 5 random colors
+    const colors = [];
+    for (let i = 0; i < 5; i++) {
+      const hue = Math.floor(Math.random() * 360);
+      const saturation = 70 + Math.floor(Math.random() * 30); // 70-100%
+      const lightness = 40 + Math.floor(Math.random() * 40); // 40-80%
+      
+      colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+    }
+    
+    const newPalette = {
+      id: 'palette_' + Date.now(),
+      name: paletteName.trim(),
+      colors: colors
+    };
+    
+    state.colorPalettes.push(newPalette);
+    saveColorPalettes();
+    
+    // Update the UI
+    const designWidget = document.getElementById('design-tools-widget');
+    if (designWidget) {
+      renderSavedPalettes(designWidget.querySelector('.widget-body'));
+    }
+    
+    showNotification(`Color palette "${paletteName}" created`, 'success');
+  }
+  
+  function openColorPicker() {
+    // In a real implementation, this would open a color picker
+    // For demo, we'll show a notification
+    showNotification('Color picker would open here', 'info');
+  }
+  
+  function openContrastChecker() {
+    // In a real implementation, this would open a contrast checker
+    // For demo, we'll show a notification
+    showNotification('Contrast checker would open here', 'info');
+  }
+  
+  function addInspirationImage() {
+    // In a real implementation, this would allow adding an image
+    // For demo, we'll show a notification
+    showNotification('Image upload would be available here', 'info');
+  }
+  
+  function initializeClientManager(container) {
+    renderClientList(container);
+    
+    // Add event listener for add client button
+    container.querySelector('.add-client-btn').addEventListener('click', addNewClient);
+  }
+  
+  function renderClientList(container) {
+    const clientList = container.querySelector('.client-list');
+    if (!clientList) return;
+    
+    clientList.innerHTML = '';
+    
+    state.clients.forEach(client => {
+      const clientItem = document.createElement('div');
+      clientItem.className = 'client-item';
+      clientItem.dataset.id = client.id;
+      
+      clientItem.innerHTML = `
+        <div class="client-color" style="background-color: ${client.color};"></div>
+        <div class="client-name">${client.name}</div>
+      `;
+      
+      clientItem.addEventListener('click', () => {
+        selectClient(client.id, container);
+      });
+      
+      clientList.appendChild(clientItem);
+    });
+  }
+  
+  function selectClient(clientId, container) {
+    state.activeClient = clientId;
+    
+    // Highlight selected client
+    const clientItems = container.querySelectorAll('.client-item');
+    clientItems.forEach(item => {
+      if (item.dataset.id === clientId) {
+        item.style.backgroundColor = 'var(--teal-light)';
+      } else {
+        item.style.backgroundColor = '';
+      }
+    });
+    
+    // Show client info
+    const clientInfo = container.querySelector('.client-info');
+    const client = state.clients.find(c => c.id === clientId);
+    
+    if (!client || !clientInfo) return;
+    
+    clientInfo.innerHTML = `
+      <h4>${client.name}</h4>
+      <div class="client-contact">
+        ${client.contact.email ? `Email: ${client.contact.email}<br>` : ''}
+        ${client.contact.phone ? `Phone: ${client.contact.phone}` : ''}
+      </div>
+      
+      <h4 style="margin-top: 15px;">Projects</h4>
+      <div class="client-projects">
+        ${client.projects.length > 0 ? 
+          client.projects.map(project => `
+            <div class="project-item" data-id="${project.id}">${project.name}</div>
+          `).join('') : 
+          '<div style="color: #888;">No projects yet</div>'
+        }
+      </div>
+      
+      <div style="margin-top: 10px;">
+        <button class="widget-button add-project-for-client-btn">Add Project</button>
+        <button class="widget-button edit-client-btn">Edit Client</button>
+      </div>
+    `;
+    
+    // Add event listeners
+    clientInfo.querySelector('.add-project-for-client-btn').addEventListener('click', () => {
+      addProjectForClient(clientId);
+    });
+    
+    clientInfo.querySelector('.edit-client-btn').addEventListener('click', () => {
+      editClient(clientId);
+    });
+  }
+  
+  function addNewClient() {
+    const clientName = prompt('Enter client name:');
+    if (!clientName || !clientName.trim()) return;
+    
+    const email = prompt('Enter client email (optional):');
+    const phone = prompt('Enter client phone (optional):');
+    
+    // Generate a random color
+    const hue = Math.floor(Math.random() * 360);
+    const color = `hsl(${hue}, 70%, 60%)`;
+    
+    const newClient = {
+      id: 'client_' + Date.now(),
+      name: clientName.trim(),
+      color: color,
+      contact: {
+        email: email ? email.trim() : '',
+        phone: phone ? phone.trim() : ''
+      },
+      projects: []
+    };
+    
+    state.clients.push(newClient);
+    saveClients();
+    
+    // Update the UI
+    const clientWidget = document.getElementById('client-widget');
+    if (clientWidget) {
+      renderClientList(clientWidget.querySelector('.widget-body'));
+      selectClient(newClient.id, clientWidget.querySelector('.widget-body'));
+    }
+    
+    showNotification(`Client "${clientName}" added`, 'success');
+  }
+  
+  function editClient(clientId) {
+    const client = state.clients.find(c => c.id === clientId);
+    if (!client) return;
+    
+    const newName = prompt('Edit client name:', client.name);
+    if (newName === null) return; // Cancelled
+    
+    const newEmail = prompt('Edit client email:', client.contact.email);
+    if (newEmail === null) return; // Cancelled
+    
+    const newPhone = prompt('Edit client phone:', client.contact.phone);
+    if (newPhone === null) return; // Cancelled
+    
+    client.name = newName.trim();
+    client.contact.email = newEmail.trim();
+    client.contact.phone = newPhone.trim();
+    
+    saveClients();
+    
+    // Update the UI
+    const clientWidget = document.getElementById('client-widget');
+    if (clientWidget) {
+      renderClientList(clientWidget.querySelector('.widget-body'));
+      selectClient(clientId, clientWidget.querySelector('.widget-body'));
+    }
+    
+    showNotification('Client updated', 'success');
+  }
+  
+  function addProjectForClient(clientId) {
+    const client = state.clients.find(c => c.id === clientId);
+    if (!client) return;
+    
+    const projectName = prompt(`Enter project name for ${client.name}:`);
+    if (!projectName || !projectName.trim()) return;
+    
+    // Create a new project in the projects list
+    const projectId = 'proj_' + Date.now();
+    const newProject = {
+      id: projectId,
+      name: projectName.trim(),
+      folders: [],
+      color: client.color,
+      clientId: clientId
+    };
+    
+    state.projects.push(newProject);
+    
+    // Add reference to the client
+    client.projects.push({
+      id: projectId,
+      name: projectName.trim()
+    });
+    
+    saveProjects();
+    saveClients();
+    
+    // Update both project and client UIs
+    const clientWidget = document.getElementById('client-widget');
+    if (clientWidget) {
+      selectClient(clientId, clientWidget.querySelector('.widget-body'));
+    }
+    
+    const projectWidget = document.getElementById('project-widget');
+    if (projectWidget) {
+      renderProjects();
+    }
+    
+    showNotification(`Project "${projectName}" created for ${client.name}`, 'success');
+  }
+  
+  function initializeTimeline(container) {
+    // Create the timeline dates
+    const timelineDays = container.querySelector('.timeline-days');
+    if (!timelineDays) return;
+    
+    timelineDays.innerHTML = '';
+    
+    // Get the current week dates
+    const today = new Date();
+    const currentDay = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - currentDay); // Start from Sunday
+    
+    // Create day headers
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      
+      const dayElement = document.createElement('div');
+      dayElement.className = 'timeline-day';
+      if (date.toDateString() === today.toDateString()) {
+        dayElement.classList.add('today');
+      }
+      
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+      const dayNumber = date.getDate();
+      
+      dayElement.innerHTML = `${dayName}<br>${dayNumber}`;
+      timelineDays.appendChild(dayElement);
+    }
+    
+    // Populate the timeline with events (tasks and deadlines)
+    populateTimelineEvents(container, startDate);
+    
+    // Add event listeners for navigation
+    container.querySelector('.prev-week-btn').addEventListener('click', () => {
+      navigateTimeline(-7, container);
+    });
+    
+    container.querySelector('.next-week-btn').addEventListener('click', () => {
+      navigateTimeline(7, container);
+    });
+  }
+  
+  function populateTimelineEvents(container, startDate) {
+    const timelineEvents = container.querySelector('.timeline-events');
+    if (!timelineEvents) return;
+    
+    timelineEvents.innerHTML = '';
+    
+    // Calculate the end date (7 days from start)
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 7);
+    
+    // Filter tasks with due dates in this range
+    const tasksInRange = state.tasks.filter(task => {
+      const dueDate = new Date(task.due);
+      return dueDate >= startDate && dueDate < endDate;
+    });
+    
+    // Position tasks on the timeline
+    tasksInRange.forEach(task => {
+      const dueDate = new Date(task.due);
+      const dayIndex = Math.floor((dueDate - startDate) / (24 * 60 * 60 * 1000));
+      
+      if (dayIndex >= 0 && dayIndex < 7) {
+        const eventElement = document.createElement('div');
+        eventElement.className = 'timeline-event';
+        eventElement.textContent = task.text;
+        eventElement.title = `${task.text} - Due: ${dueDate.toLocaleString()}`;
+        
+        // Position horizontally based on the day
+        const leftPosition = (dayIndex / 7 * 100) + '%';
+        eventElement.style.left = leftPosition;
+        
+        // Position vertically (random for now to avoid overlaps)
+        const topPosition = 10 + (Math.random() * 100) + 'px';
+        eventElement.style.top = topPosition;
+        
+        timelineEvents.appendChild(eventElement);
+      }
+    });
+    
+    // Update the date range display
+    const rangeDisplay = container.querySelector('.timeline-date-range');
+    if (rangeDisplay) {
+      const startFormatted = startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const endFormatted = endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      rangeDisplay.textContent = `${startFormatted} - ${endFormatted}`;
+    }
+  }
+  
+  function navigateTimeline(days, container) {
+    // Get the current start date from the first day element
+    const firstDayElement = container.querySelector('.timeline-day');
+    if (!firstDayElement) return;
+    
+    // Parse the date from the element
+    const dayText = firstDayElement.textContent.trim();
+    const dayMatches = dayText.match(/[A-Za-z]+\s*(\d+)/);
+    
+    if (!dayMatches) return;
+    
+    const dayNumber = parseInt(dayMatches[1]);
+    
+    // Get the current month and year
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    
+    // Create a date object for the first displayed day
+    const firstDate = new Date(currentYear, currentMonth, dayNumber);
+    
+    // Adjust if the displayed month is likely wrong (e.g., we're looking at dates from the previous or next month)
+    if (today.getDate() < 15 && dayNumber > 15) {
+      // If today is early in the month and the displayed day is late, it's probably the previous month
+      firstDate.setMonth(currentMonth - 1);
+    } else if (today.getDate() > 15 && dayNumber < 15) {
+      // If today is late in the month and the displayed day is early, it's probably the next month
+      firstDate.setMonth(currentMonth + 1);
+    }
+    
+    // Navigate by the specified number of days
+    firstDate.setDate(firstDate.getDate() + days);
+    
+    // Re-initialize the timeline with the new start date
+    const timelineDays = container.querySelector('.timeline-days');
+    if (!timelineDays) return;
+    
+    timelineDays.innerHTML = '';
+    
+    // Create day headers for the new week
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(firstDate);
+      date.setDate(firstDate.getDate() + i);
+      
+      const dayElement = document.createElement('div');
+      dayElement.className = 'timeline-day';
+      if (date.toDateString() === today.toDateString()) {
+        dayElement.classList.add('today');
+      }
+      
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+      const dayNumber = date.getDate();
+      
+      dayElement.innerHTML = `${dayName}<br>${dayNumber}`;
+      timelineDays.appendChild(dayElement);
+    }
+    
+    // Populate the timeline with events for the new week
+    populateTimelineEvents(container, firstDate);
+  }
+  
+  // Task management functions
+  function addTask(taskText) {
+    const today = new Date();
+    const dueDate = new Date(today);
+    dueDate.setHours(23, 59, 59, 999); // End of today
+    
+    const newTask = {
+      id: Date.now(),
+      text: taskText,
+      completed: false,
+      created: today.toISOString(),
+      due: dueDate.toISOString(),
+      projectId: state.activeProject || 'default'
+    };
+    
+    state.tasks.push(newTask);
+    saveTasks();
+    renderTasks();
+    showNotification('Task added', 'success');
+    
+    // Update the timeline if it's visible
+    const timelineWidget = document.getElementById('timeline-widget');
+    if (timelineWidget && timelineWidget.style.display === 'flex') {
+      initializeTimeline(timelineWidget.querySelector('.widget-body'));
+    }
+  }
+  
+  function toggleTaskCompletion(taskId) {
     const task = state.tasks.find(t => t.id === taskId);
     if (task) {
       task.completed = !task.completed;
@@ -271,7 +1458,95 @@ function toggleTaskCompletion(taskId) {
     }
   }
   
-  function selectProject// Ultimate TypingMind Extension for ADHD Graphic Design Students
+  function selectProject(projectId, folderId = null) {
+    state.activeProject = projectId;
+    
+    // Update UI to show active project
+    const projectItems = document.querySelectorAll('.project-folder');
+    projectItems.forEach(item => {
+      if (item.dataset.id === projectId) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+    
+    // Update task list title
+    const project = state.projects.find(p => p.id === projectId);
+    if (project) {
+      const taskListTitle = document.querySelector('.task-list-title');
+      if (taskListTitle) {
+        taskListTitle.textContent = `Tasks: ${project.name}`;
+      }
+    }
+    
+    // Render tasks for this project
+    renderTasks();
+    
+    showNotification(`Switched to ${project ? project.name : 'Default Project'}`, 'info');
+  }
+  
+  function renderProjects() {
+    const projectsList = document.querySelector('.project-folders-list');
+    if (!projectsList) return;
+    
+    projectsList.innerHTML = '';
+    
+    state.projects.forEach(project => {
+      const projectItem = document.createElement('div');
+      projectItem.className = `project-folder ${project.id === state.activeProject ? 'active' : ''}`;
+      projectItem.dataset.id = project.id;
+      
+      // Create project color indicator
+      const colorDot = project.color ? 
+        `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: ${project.color}; margin-right: 5px;"></span>` : 
+        '';
+      
+      projectItem.innerHTML = `
+        <div class="project-name">${colorDot}${project.name}</div>
+        <div class="project-actions" style="float: right;">
+          <span class="add-folder" style="margin-right: 5px; cursor: pointer;">📁+</span>
+          ${project.id !== 'default' ? '<span class="delete-project" style="cursor: pointer;">🗑️</span>' : ''}
+        </div>
+      `;
+      
+      projectItem.addEventListener('click', (e) => {
+        if (!e.target.matches('.add-folder') && !e.target.matches('.delete-project')) {
+          selectProject(project.id);
+        }
+      });
+      
+      if (projectItem.querySelector('.add-folder')) {
+        projectItem.querySelector('.add-folder').addEventListener('click', () => addSubfolder(project.id));
+      }
+      
+      if (projectItem.querySelector('.delete-project')) {
+        projectItem.querySelector('.delete-project').addEventListener('click', () => deleteProject(project.id));
+      }
+      
+      projectsList.appendChild(projectItem);
+      
+      // Add subfolders if any
+      if (project.folders && project.folders.length > 0) {
+        project.folders.forEach(folder => {
+          const folderItem = document.createElement('div');
+          folderItem.className = 'project-folder subfolder';
+          folderItem.dataset.id = folder.id;
+          folderItem.dataset.parentId = project.id;
+          folderItem.innerHTML = `
+            <div class="folder-name">📁 ${folder.name}</div>
+            <div class="folder-actions" style="float: right;">
+              <span class="delete-folder" style="cursor: pointer;">🗑️</span>
+            </div>
+          `;
+          
+          folderItem.addEventListener('click', (e) => {
+            if (!e.target.matches('.delete-folder')) {
+              selectProject(project.id, folder.id);
+            }
+          });
+          
+          if (folderItem.querySelector('.delete// Ultimate TypingMind Extension for ADHD Graphic Design Students
 // Features: Multi-color themes, movable widgets, notebook, module docs, integrations, and performance optimization
 
 (function() {
@@ -2041,4 +3316,5 @@ function toggleTaskCompletion(taskId) {
           </div>
         </div>
         
-        <div id="typography-
+        <div id="typography-tab" class="tab-content">
+          <h4>Font Pairings
